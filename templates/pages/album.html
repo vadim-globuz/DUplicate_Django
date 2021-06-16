@@ -1,0 +1,84 @@
+{% extends 'pages/base.html' %}
+ {% load static %}
+{% load bootstrap4 %}
+{% block main %}
+  <body>
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+ <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Let's Duel {{ user.first_name}}</a>
+
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="{% url 'login:logout' %}">Выход</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid">
+      <main class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:profile' %}">
+                  <span data-feather="home"></span>
+                  Личный Кабинет
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:add_post' %}">
+                  <span data-feather="image"></span>
+                  Добавить работы
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'main:album' %}">
+                  <span data-feather="book-open"></span>
+                  Галерея<span class="sr-only">(current)</span>
+                </a>
+              </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:duel' %}">
+                  <span data-feather="book-open"></span>
+                  Дуэли
+                </a>
+              </li>
+
+            </ul>
+
+
+
+          </div>
+        </nav>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <h1 class="h3 text-center my-4">Вот ваши работы {{ user.first_name }}</h1>
+
+    <div class="row">
+        {% for photo in images %}
+        <div class="col-lg-3 col-md-4 col-6 thumb">
+            <a data-fancybox="gallery" href="{{ photo.cover.url }}">
+                <img class="img-fluid" id="{{ photo.id }}" src="{{ photo.cover.url }}" alt="...">
+                <label for="{{ photo.id }}">{{ photo.title }}<span class="badge badge-primary">{{ photo.rate }}</span>
+                    <span class="badge badge-danger">{{ photo.loses }}</span></label>
+
+            </a>
+            <form method="post">
+               {% csrf_token %}
+                <input type="hidden" name="id_picture" value="{{ photo.id }}">
+                {% buttons %}
+      <button class="btn btn-lg btn-danger btn-block" type="submit">Удалить</button>
+         {% endbuttons %}
+            </form>
+        </div>
+
+    {% endfor %}
+    </div>
+
+</main>
+ <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+{% endblock %}
+</main>
+</div>

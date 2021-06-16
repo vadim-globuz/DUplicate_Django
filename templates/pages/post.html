@@ -1,0 +1,79 @@
+{% extends 'pages/base.html' %}
+
+{% load bootstrap4 %}
+{% load static %}
+
+{% block main %}
+
+     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Let's Duel {{ user.first_name}}</a>
+      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="{% url 'login:logout' %}">Выход</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid">
+      <main class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:profile' %}">
+                  <span data-feather="home"></span>
+                  Личный Кабинет
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'main:add_post' %}">
+                  <span data-feather="image"></span>
+                  Добавить работы
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " href="{% url 'main:album' %}">
+                  <span data-feather="book-open"></span>
+                  Галерея<span class="sr-only">(current)</span>
+                </a>
+              </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:duel' %}">
+                  <span data-feather="book-open"></span>
+                  Дуэли
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <form method="post" class="form-signin" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+      <h1 class="h3 mb-3 font-weight-normal">Загрузка работы</h1>
+      {% bootstrap_form form %}
+
+          {% buttons %}
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Загрузить файл</button>
+         {% endbuttons %}
+      <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+
+
+
+
+
+
+
+ <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+
+
+</form>
+    </main>
+{% endblock main %}

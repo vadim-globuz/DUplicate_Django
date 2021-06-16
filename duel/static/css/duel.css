@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.parent {
+  width:90%;
+  display: flex;
+  justify-content: space-around;
+  margin: 30px auto;
+}
+
+.parent div {
+  width: 40%;
+}

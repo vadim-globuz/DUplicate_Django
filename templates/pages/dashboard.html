@@ -1,0 +1,160 @@
+{% extends 'pages/base.html' %}
+{% block main %}
+    {% load static %}
+  <body>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Let's Duel {{ user.first_name}}</a>
+      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="{% url 'login:logout' %}">Выход</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  <span data-feather="home"></span>
+                  Личный Кабинет <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:add_post' %}">
+                  <span data-feather="image"></span>
+                  Добавить работы
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:album' %}">
+                  <span data-feather="book-open"></span>
+                  Галерея
+                </a>
+              </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:duel' %}">
+                  <span data-feather="users"></span>
+                  Дуэли
+                </a>
+              </li>
+
+            </ul>
+
+
+
+          </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 class="h2">Dashboard</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+                <button class="btn btn-sm btn-outline-secondary">Share</button>
+                <button class="btn btn-sm btn-outline-secondary">Export</button>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar"></span>
+                This week
+              </button>
+            </div>
+          </div>
+
+          <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
+
+          <h2>Статистика работ</h2>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Назание</th>
+                  <th>Рейтинг</th>
+
+                </tr>
+              </thead>
+              <tbody>
+
+
+
+                {% for work in works %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ work.title }}</td>
+                  <td>{{ work.rate }}</td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+        let titles = []
+        let values = []
+        {% for work in works %}
+                      values.push({{ work.rate }})
+                      titles.push("{{ work.title }}")
+            {% endfor %}
+        let ctx = document.getElementById("myChart");
+        let myChart = new Chart (ctx, {
+            type: 'bar',
+            data: {
+                labels: titles,
+                datasets: [{
+                    data: values,
+                    lineTension: 0,
+                    backgroundColor:  [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+                    borderColor: '',
+                    borderWidth: 5,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false,
+                }
+            }
+        });
+
+    </script>
+
+    {% csrf_token %}
+
+    <!-- Icons -->
+
+
+ <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <!-- Graphs -->
+
+
+
+  </body>
+{% endblock main %}
