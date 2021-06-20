@@ -89,3 +89,11 @@ def duel_get_works(request):
         looser.save()
 
     return render(request, 'pages/duel_main.html', context)
+
+
+def leaderboards(request):
+    order_works = Post.objects.all().order_by('-rate')[:10]
+    context = {
+        'order_works': order_works,
+    }
+    return render(request, 'pages/leaderboard.html', context)

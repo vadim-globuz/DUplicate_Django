@@ -1,12 +1,14 @@
 {% extends 'pages/base.html' %}
- {% load static %}
 {% load bootstrap4 %}
+{% bootstrap_jquery %}
+{% load static %}
 {% block main %}
-  <body>
+ <body>
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'css/duel.css' %}" rel="stylesheet">
  <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Let's Duel {{ user.first_name}}</a>
-
+      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="{% url 'login:logout' %}">Выход</a>
@@ -32,19 +34,20 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="{% url 'main:album' %}">
+                <a class="nav-link " href="{% url 'main:album' %}">
                   <span data-feather="book-open"></span>
                   Галерея<span class="sr-only">(current)</span>
                 </a>
               </li>
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'main:duel' %}">
+                <a class="nav-link " href="{% url 'main:duel' %}">
                   <span data-feather="book-open"></span>
                   Дуэли
                 </a>
               </li>
-                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'main:top' %}">
+
+                <li class="nav-item">
+                <a class="nav-link active" href="{% url 'main:top' %}">
                   <span data-feather="book-open"></span>
                   Топ работ
                 </a>
@@ -57,34 +60,35 @@
           </div>
         </nav>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-    <h1 class="h3 text-center my-4">Вот ваши работы {{ user.first_name }}</h1>
+    <h1 class="h3 text-center my-4">Топ работ</h1>
+ <div class="container">
 
-    <div class="row">
-        {% for photo in images %}
-        <div class="col-lg-3 col-md-4 col-6 thumb">
-            <a data-fancybox="gallery" href="{{ photo.cover.url }}">
-                <img class="img-fluid" id="{{ photo.id }}" src="{{ photo.cover.url }}" alt="...">
-                <label for="{{ photo.id }}">{{ photo.title }}<span class="badge badge-primary">{{ photo.rate }}</span>
-                    <span class="badge badge-danger">{{ photo.loses }}</span></label>
-
-            </a>
-            <form method="post">
-               {% csrf_token %}
-                <input type="hidden" name="id_picture" value="{{ photo.id }}">
-                {% buttons %}
-      <button class="btn btn-lg btn-danger btn-block" type="submit">Удалить</button>
-         {% endbuttons %}
-            </form>
-        </div>
-
-    {% endfor %}
-    </div>
+    <table class="table table-hover table-light">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Работа</th>
+      <th scope="col">Пользователь</th>
+      <th scope="col">Рейтинг работы</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in order_works %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{{ item.cover.url }}">{{ item.title }}</a></td>
+      <td>{{ item.key }}</td>
+      <td>{{ item.rate }}</td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+   </div>
 
 </main>
  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
       feather.replace()
     </script>
-{% endblock %}
-</main>
-</div>
+{% endblock main %}
+

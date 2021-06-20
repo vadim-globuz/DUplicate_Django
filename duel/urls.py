@@ -8,4 +8,5 @@ urlpatterns = [
     path('post/', views.post_new, name='add_post'),
     path('album/', views.album_view, name='album'),
     path('duels/', views.duel_get_works, name='duel'),
+    path('leaderboard/', views.leaderboards, name='top'),
 ]
