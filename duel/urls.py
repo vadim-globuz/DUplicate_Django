@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 app_name = 'main'
@@ -9,4 +10,6 @@ urlpatterns = [
     path('album/', views.album_view, name='album'),
     path('duels/', views.duel_get_works, name='duel'),
     path('leaderboard/', views.leaderboards, name='top'),
+    path('create_organisation/', views.organisation_new, name='create_org'),
+    path('organisation/', views.organisations, name='org_menu'),
 ]

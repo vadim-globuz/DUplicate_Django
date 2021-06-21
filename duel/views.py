@@ -1,10 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template import loader
-from django.contrib.auth.decorators import login_required
 
-from .forms import PostForm
-from .models import Post, User
+from .forms import PostForm, OrgForm
+from .models import Post, User, Organisation
 
 
 def index(request):
@@ -43,6 +43,20 @@ def post_new(request):
 
 
 @login_required()
+def organisation_new(request):
+    if request.method == "POST":
+        form = OrgForm(request.POST, request.FILES)
+        if form.is_valid():
+            org = form.save(commit=False)
+            org.admin_user = request.user
+            org.save()
+            return redirect('main:profile')
+    else:
+        form = OrgForm()
+    return render(request, 'pages/create_organisations.html', {'form': form})
+
+
+@login_required()
 def album_view(request):
     template = loader.get_template('pages/album.html')
     model = Post.objects.filter(key=request.user.id)
@@ -63,8 +77,7 @@ def duel_get_works(request):
     user = User.objects.get(pk=request.user.id)
     ex_query = user.middleTab.all()
     query_for_template = model.difference(ex_query)
-    print(ex_query)
-    print(query_for_template)
+
     context = {
         'deuce': query_for_template[:2],
 
@@ -91,9 +104,24 @@ def duel_get_works(request):
     return render(request, 'pages/duel_main.html', context)
 
 
+@login_required()
 def leaderboards(request):
     order_works = Post.objects.all().order_by('-rate')[:10]
     context = {
         'order_works': order_works,
     }
     return render(request, 'pages/leaderboard.html', context)
+
+
+@login_required()
+def organisations(request):
+    admin_org = Organisation.objects.filter(admin_user_id=request.user.id)
+    user = User.objects.get(pk=request.user.id)
+    users_org = user.users.all()
+
+    template = loader.get_template('pages/organisation_menu.html')
+    context = {
+        'org_adm': admin_org,
+        'org_user': users_org,
+    }
+    return HttpResponse(template.render(context, request))

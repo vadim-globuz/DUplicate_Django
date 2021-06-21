@@ -1,6 +1,5 @@
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import User
 from django.db import models
-from django.contrib.auth.models import User, PermissionsMixin
 
 
 class Post(models.Model):
@@ -13,3 +12,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Organisation(models.Model):
+    users = models.ManyToManyField(User, default='users', blank=True, related_name='users')
+    admin_user = models.ForeignKey(User, related_name='owner', on_delete=models.CASCADE, null=True)
+    organisation_name = models.TextField(max_length=20)
