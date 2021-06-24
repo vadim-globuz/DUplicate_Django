@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Post, Organisation
+from .models import Post, Profile, Organisation
 
 
 class PostForm(forms.ModelForm):
@@ -14,11 +14,13 @@ class PostForm(forms.ModelForm):
         }
 
 
-class OrgForm(forms.ModelForm):
+class CreateProfile(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['org']
+
+
+class AddOrg(forms.ModelForm):
     class Meta:
         model = Organisation
-        fields = ['users', 'organisation_name']
-        widgets = {
-            'users': forms.SelectMultiple(),
-            'organisation_name': forms.TextInput()
-        }
+        fields = ['org_name', 'vote_type']

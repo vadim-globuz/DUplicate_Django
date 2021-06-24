@@ -1,0 +1,47 @@
+{% extends 'pages/base.html' %}
+{% load bootstrap4 %}
+{% bootstrap_jquery %}
+{% load static %}
+
+{% block main %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        <h1 class="h3 text-center my-4">Дуэли</h1>
+        <div class="container">
+
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="parent">
+
+
+                    {% if deuce.1.cover.url %}
+                        {% for work in deuce %}
+
+                            <div>
+                                <img src="{{ work.cover.url }}" alt="" class="card-img-top">
+
+                                <input type="hidden" name="work_id_{{ forloop.counter }}" value="{{ work.id }}">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="customRadioInline{{ forloop.counter }}"
+                                           name="customRadioInline1" class="custom-control-input" value="{{ work.id }}">
+                                    <label class="custom-control-label"
+                                           for="customRadioInline{{ forloop.counter }}">{{ work.title }}</label>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+
+                        </div>
+                        <button type="submit" class="btn btn-primary card-img-bottom">Голосовать<span
+                                class="badge badge-light rate">{{ work.rate }}</span><span class="sr-only">unread messages</span>
+                        </button>
+
+                    {% else %}
+                        <p>Фото закончились</p>
+                    {% endif %}
+
+
+            </form>
+        </div>
+    </main>
+{% endblock main %}

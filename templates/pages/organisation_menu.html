@@ -3,15 +3,22 @@
 {% load static %}
 
 {% block main %}
-    {% if org_adm %}
-        <p>Вы являетесь администратором организаций: {% for i in org_adm %}{{ i.organisation_name }}  {% endfor %}</p>
-        <a href="{% url 'login:signup' %}" class="btn btn-lg btn-outline-dark">Добавить участников</a>
-        <a href="{% url 'login:signup' %}" class="btn btn-lg btn-outline-danger">Удалить организацию</a>
-    {% elif org_user %}
-        <p>Вы участник групп: {% for x in org_user %}{{ x.organisation_name }}  {% endfor %} </p>
-        <a href="{% url 'main:create_org' %}" class="btn btn-lg btn-outline-info">Создать организацию</a>
-    {% else %}
-        <p>Вы не участник групп</p>
-        <a href="{% url 'main:create_org' %}" class="btn btn-lg btn-outline-info">Создать организацию</a>
-    {% endif %}
+    <body class="text-center">
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+    <div>
+        <a href="{% url 'main:org_add' %}" class="btn btn-lg btn-outline-dark">Добавить организацию</a>
+    </div>
+    <div>
+        <a href="{% url 'main:org_enter' %}" class="btn btn-lg btn-outline-danger">Найти организацию</a>
+    </div>
+    <div>
+        <a href="{% url 'main:org_duel' %}" class="btn btn-lg btn-outline-info">Дуэли организации</a>
+    </div>
+    <div>
+        <a href="{% url 'main:org_enter' %}" class="btn btn-lg btn-outline-warning">Топ работ</a>
+    </div>
+
+
+    </body>
+
 {% endblock main %}
