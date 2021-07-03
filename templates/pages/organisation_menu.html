@@ -5,19 +5,29 @@
 {% block main %}
     <body class="text-center">
     <link href="{% static 'css/signin.css' %}" rel="stylesheet">
-    <div>
-        <a href="{% url 'main:org_add' %}" class="btn btn-lg btn-outline-dark">Добавить организацию</a>
+    <div class="links">
+        <div class="link">
+            <a href="{% url 'main:org_add' %}" class="btn btn-lg btn-outline-dark">Добавить организацию</a>
+        </div>
+        <div class="link">
+            <a href="{% url 'main:info_org' %}" class="btn btn-lg btn-info">О моей организации</a>
+        </div>
+        <div class="link">
+            <a href="{% url 'main:org_enter' %}" class="btn btn-lg btn-outline-success">Найти организацию</a>
+        </div>
+        <div class="link">
+            <a href="{% url 'main:del_org' %}" class="btn btn-lg btn-outline-danger">Удалить организацию</a>
+        </div>
+        <div class="link">
+            <a href="{% url 'main:exit_org' %}" class="btn btn-lg btn-warning">Выйти из организации</a>
+        </div>
+        <div class="link">
+            <a href="{% url 'main:org_duel' %}" class="btn btn-lg btn-outline-info">Дуэли организации</a>
+        </div>
+        <div class="link">
+            <a href="{% url 'main:top_organisations' %}" class="btn btn-lg btn-outline-warning">Топ работ</a>
+        </div>
     </div>
-    <div>
-        <a href="{% url 'main:org_enter' %}" class="btn btn-lg btn-outline-danger">Найти организацию</a>
-    </div>
-    <div>
-        <a href="{% url 'main:org_duel' %}" class="btn btn-lg btn-outline-info">Дуэли организации</a>
-    </div>
-    <div>
-        <a href="{% url 'main:org_enter' %}" class="btn btn-lg btn-outline-warning">Топ работ</a>
-    </div>
-
 
     </body>
 

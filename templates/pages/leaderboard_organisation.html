@@ -1,0 +1,95 @@
+{% extends 'pages/base.html' %}
+{% load bootstrap4 %}
+{% bootstrap_jquery %}
+{% load static %}
+{% block main %}
+    <body>
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'css/duel.css' %}" rel="stylesheet">
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Let's Duel {{ user.first_name }}</a>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="{% url 'login:logout' %}">Выход</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+    <main class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:profile' %}">
+                        <span data-feather="home"></span>
+                        Личный Кабинет
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:add_post' %}">
+                        <span data-feather="image"></span>
+                        Добавить работы
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'main:album' %}">
+                        <span data-feather="book-open"></span>
+                        Галерея<span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'main:duel' %}">
+                        <span data-feather="book-open"></span>
+                        Дуэли
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'main:top' %}">
+                        <span data-feather="book-open"></span>
+                        Топ работ
+                    </a>
+                </li>
+
+            </ul>
+
+
+        </div>
+    </nav>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        <h1 class="h3 text-center my-4">Топ работ</h1>
+        <div class="container">
+
+            <table class="table table-hover table-light">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Работа</th>
+                    <th scope="col">Пользователь</th>
+                    <th scope="col">Поражения</th>
+                    <th scope="col">Победы</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in order_works %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="{{ item.cover.url }}">{{ item.title }}</a></td>
+                        <td>{{ item.key }}</td>
+                        <td>{{ item.organisation_loses }}</td>
+                        <td>{{ item.organisation_rate }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+        feather.replace()
+    </script>
+{% endblock main %}
+

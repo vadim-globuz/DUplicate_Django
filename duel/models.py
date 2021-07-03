@@ -19,7 +19,7 @@ class Post(models.Model):
 class Organisation(models.Model):
     org_name = models.TextField(max_length=20, verbose_name='Название организации')
     admin = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Администратор')
-    vote_type = models.BooleanField(default=False, verbose_name='Каждая работа c каждой')
+    vote_type = models.BooleanField(default=False, verbose_name='Каждая проигравшая попадает в дуэль к следующей')
 
     def __str__(self):
         return self.org_name

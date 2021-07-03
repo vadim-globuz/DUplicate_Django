@@ -13,5 +13,9 @@ urlpatterns = [
     path('organisations_add/', views.organisation_new, name='org_add'),
     path('organisations_enter/', views.enter_org, name='org_enter'),
     path('organisations/', views.org_menu, name='org_menu'),
-    path('organisations_duel/', views.duel_get_works_organisation, name='org_duel')
+    path('organisations_duel/', views.duel_get_works_organisation, name='org_duel'),
+    path('leaderboard_org/', views.leaderboards_organisation, name='top_organisations'),
+    path('delete_organisation/', views.delete_organisation, name='del_org'),
+    path('exit_from_organisation/', views.exit_from_org, name='exit_org'),
+    path('organisation_info/', views.organisation_info, name='info_org'),
 ]

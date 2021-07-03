@@ -39,27 +39,31 @@
               </li>
                 <li class="nav-item">
                 <a class="nav-link" href="{% url 'main:duel' %}">
-                  <span data-feather="book-open"></span>
-                  Дуэли
+                    <span data-feather="book-open"></span>
+                    Дуэли
                 </a>
-              </li>
-                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'main:top' %}">
-                  <span data-feather="book-open"></span>
-                  Топ работ
-                </a>
-              </li>
-
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:top' %}">
+                        <span data-feather="clipboard"></span>
+                        Топ работ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:org_menu' %}">
+                        <span data-feather="briefcase"></span>
+                        Организации
+                    </a>
+                </li>
             </ul>
-
 
 
           </div>
         </nav>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-    <h1 class="h3 text-center my-4">Вот ваши работы {{ user.first_name }}</h1>
+        <h1 class="h3 text-center my-4">Вот ваши работы {{ user.first_name }}</h1>
 
-    <div class="row">
+        <div class="row">
         {% for photo in images %}
         <div class="col-lg-3 col-md-4 col-6 thumb">
             <a data-fancybox="gallery" href="{{ photo.cover.url }}">

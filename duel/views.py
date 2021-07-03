@@ -101,15 +101,15 @@ def leaderboards(request):
 
 @login_required()
 def organisation_new(request):
-    org_obj = Organisation.objects.filter(admin_id=request.user.id)
     check_member = Profile.objects.filter(user_id=request.user.id)
     if request.method == "POST":
+
         form = AddOrg(request.POST)
         if form.is_valid():
             org = form.save(commit=False)
             org.admin_id = request.user.id
             org.save()
-
+            org_obj = Organisation.objects.filter(admin_id=request.user.id).last()
             prof = Profile.objects.create(user_id=request.user.id, org_id=org_obj.id)
             prof.save()
 
@@ -154,13 +154,18 @@ def duel_get_works_organisation(request):
     user = User.objects.get(pk=request.user.id)
     ex_query = user.middleTab.all()
     query_for_template = model.difference(ex_query)
-    organisation_id = Profile.objects.get(user_id=request.user.id)
-    organisation_flag = Organisation.objects.get(id=organisation_id.org_id)
+    organisation_id = Profile.objects.filter(user_id=request.user.id).first()
+    if organisation_id:
+        organisation_flag = Organisation.objects.get(id=organisation_id.org_id)
 
-    context = {
-        'deuce': query_for_template[:2],
+        context = {
+            'deuce': query_for_template[:2],
 
-    }
+        }
+    else:
+        context = {
+
+        }
     if request.method == "POST":
 
         checked_value = request.POST['customRadioInline1']
@@ -183,3 +188,93 @@ def duel_get_works_organisation(request):
         looser.save()
 
     return render(request, 'pages/duel_main.html', context)
+
+
+@login_required()
+def leaderboards_organisation(request):
+    org_member_on_request = Profile.objects.filter(user_id=request.user.id).first()
+    if org_member_on_request:
+        org_id = org_member_on_request.org_id
+        all_org_members = Profile.objects.values('user_id').filter(org_id=org_id)
+
+        order_works = Post.objects.filter(key_id__in=all_org_members).order_by('-organisation_rate',
+                                                                               'organisation_loses')
+        context = {
+            'order_works': order_works,
+        }
+    else:
+        context = {
+
+        }
+    return render(request, 'pages/leaderboard_organisation.html', context)
+
+
+@login_required()
+def delete_organisation(request):
+    is_admin = Organisation.objects.filter(admin_id=request.user.id).first()
+
+    if is_admin:
+        participants = Profile.objects.values('user_id').filter(org_id=is_admin.id)
+        posts_participants = Post.objects.filter(key_id__in=participants)
+        for _x in posts_participants:
+            _x.organisation_loses = 0
+            _x.organisation_rate = 0
+            _x.save()
+        is_admin.delete()
+        context = {
+            'answer': 'Организация удалена',
+        }
+    else:
+        context = {
+            'answer': 'Вы не администратор организации',
+        }
+    return render(request, 'pages/organisation_del_answer.html', context)
+
+
+@login_required()
+def exit_from_org(request):
+    is_admin = Organisation.objects.filter(admin_id=request.user.id)
+    if not is_admin:
+        id_participant = Profile.objects.filter(user_id=request.user.id).first()
+        if id_participant:
+            my_posts = Post.objects.filter(key_id=id_participant.user_id)
+            for _x in my_posts:
+                _x.organisation_loses = 0
+                _x.organisation_rate = 0
+                _x.save()
+            id_participant.delete()
+            context = {
+                'answer': 'Вы вышли из организации'
+            }
+        else:
+            context = {
+                'answer': 'Вы не участник организаций'
+            }
+    else:
+        context = {
+            'answer': 'Вы администратор организации, выйти нельзя'
+        }
+    return render(request, 'pages/organisation_exit_answer.html', context)
+
+
+@login_required()
+def organisation_info(request):
+    org_object = Profile.objects.filter(user_id=request.user.id).first()
+
+    if org_object:
+        admin = Organisation.objects.filter(id=org_object.org_id).first()
+
+        participants_id = Profile.objects.values('user_id').filter(org_id=org_object.org_id)
+        admin_name = User.objects.get(pk=admin.admin_id)
+        participants_names = User.objects.filter(pk__in=participants_id)
+        context = {
+            'admin': admin_name,
+            'users': participants_names,
+            'vote_type': admin.vote_type,
+
+        }
+    else:
+        context = {
+            'answer': 'Вы не участник групп',
+        }
+    return render(request, 'pages/organisation_info.html', context)
